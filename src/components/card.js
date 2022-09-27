@@ -17,7 +17,6 @@ import MenuList from "./menu";
 
 const Card = (props) => {
   const {item, select_index, handleMenu, index, hideMenu , handlePress ,to, action , children } = props;
-  // const {onPress  } = useLinkProps({to,action})
   let prop = props?.item?.snippet;
 
   let date = moment(prop?.publishedAt).format("MM/DD/YYYY");
@@ -80,15 +79,7 @@ const Card = (props) => {
             <View style={styles.marginHorizonal5}>
               {!isHover ? (
                 <>
-                   {/* <Text
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
-                  style={{...styles.nameStyle ,marginTop:5 ,marginLeft:0}}
-                >
-                  {item?.description}
-                </Text> */}
                   <View>
-                  {/* <Text style={[styles.TextStyle,{marginTop:3}]}>{'20/2/22'}</Text> */}
                     <Text style={styles.TextStyle}>{date}</Text>
                   </View>
                 </>

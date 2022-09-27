@@ -18,7 +18,6 @@ const dots = require("../assets/dots.png");
 
 const VideoCard = (props) => {
   const { item, select_index, handleMenu, index, hideMenu , handlePress, key} = props;
-  // console.log('item', item)
   let prop = props?.item?.snippet;
   let date = moment(prop?.publishedAt).format("MM/DD/YYYY");
   let thumbnail = prop?.thumbnails?.high?.url;
@@ -62,29 +61,14 @@ const VideoCard = (props) => {
 
               <Pressable
                 onPress={select_index === index ? hideMenu : handleMenu}
-                style={[styles.menuBox]}
-              >
-                
+                style={[styles.menuBox]}>
                   <Image source={dots} style={{ width: 20, height: 20 }} />
-                
               </Pressable>
             </View>
 
             <View style={styles.marginHorizonal5}>
-             
                 <>
-                  {/* <Text numberOfLines={2} ellipsizeMode="tail">
-                    {item?.subtitle}
-                  </Text>
-                  <Text
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
-                  style={{...styles.nameStyle ,marginTop:5 ,marginLeft:0}}
-                >
-                  {item?.description}
-                </Text> */}
                   <View>
-                    {/* <Text style={[styles.TextStyle,{marginTop:3}]}>{'20/2/22'}</Text> */}
                     <Text style={styles.TextStyle}>{date}</Text>
                   </View>
                 </>

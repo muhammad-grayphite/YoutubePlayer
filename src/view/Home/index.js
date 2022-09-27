@@ -5,8 +5,6 @@ import { ScrollView } from "react-native-web";
 import Card from "../../components/card";
 import { videos } from "../../constants/values";
 import { fetchVideos } from "../../utility";
-
-
 import styles from "./styles";
 
 
@@ -47,33 +45,6 @@ function Home({ navigation }) {
     }).catch((error) => { alert('somthing went wrong');})
   }
 
-
-  // const fetchData = async () => {
-  //     let url = ''
-  //     if (nextPageToken) {
-  //         url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=50&q=programming&key=${SECRET}&pageToken=${nextPageToken}`;
-  //     } else {
-  //         url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=50&q=programming&key=${SECRET}`;
-  //     }
-
-  //     try {
-  //         const response = await fetch(url);
-  //         let res = await response.json();
-  //         if (res?.error?.message) {
-  //             alert(res?.error?.message);
-  //         }
-  //         let allVideos = list.concat(res.items);
-  //         updateState({
-  //             list:allVideos,
-  //             nextPageToken: res?.nextPageToken
-  //         });
-
-  //     } catch (error) {
-  //         alert(error?.error?.message);
-  //     }
-  // };
-
-
   const showMenu = (index) => {
     updateState({ select_index: index });
   };
@@ -92,7 +63,6 @@ function Home({ navigation }) {
           let currentItemIndex = Math.ceil(currentOffset / itemHeight);
           if (distanceFromEnd) {
             if (currentItemIndex >= distanceFromEnd) {
-              // LoadMore();
               fetchData()
             }
           } else {
@@ -111,7 +81,6 @@ function Home({ navigation }) {
             justifyContent: "center"
           }}
         >
-          {/* {videos?.map((item, index) => { */}
           {list?.map((item, index) => {
             return (
               <Card
@@ -127,25 +96,7 @@ function Home({ navigation }) {
             );
           })}
         </View>
-        {/* <View style={{ backgroundColor: 'red', flex: 1 }}>
-                <Text>HOme</Text>
-
-                <Button
-                    onPress={() => navigation.navigate('Feed')}
-                    title="Learn More"
-                    color="#841584"
-                    accessibilityLabel="Learn more about this purple button"
-                />
-        <Video
-        ref={video}
-        style={{width:'100%', height:500}}
-        source={{uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',}}
-        useNativeControls
-        resizeMode="contain"
-        isLooping
-        // onPlaybackStatusUpdate={status => setStatus(() => status)}
-      />
-            </View> */}
+        
       </ScrollView>  
   )
 }

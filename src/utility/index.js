@@ -22,9 +22,8 @@ export const fetchVideos =(obj) => {
     })
 }
 
-export const fetchVideoById =(id) => {
 
-    
+export const fetchVideoById =(id) => {
     let url = `${baseUrl}videos?part=snippet,statistics&key=${SECRET}&id=${id}`
 
     console.log(url)
