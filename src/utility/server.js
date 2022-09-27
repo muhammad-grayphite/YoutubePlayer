@@ -1,0 +1,2 @@
+export const baseUrl = 'https://www.googleapis.com/youtube/v3/'
+// export const videoById = 'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=xE_rMj35BIM&key=AIzaSyAuk00iVOP8VfwQB759Gf7acy2womlkbKE'
