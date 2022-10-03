@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text,Pressable, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import moment from "moment";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -8,7 +8,7 @@ import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
 
 
 const DetailCard = (props) => {
-    const{isMenuVisible , hideMenu , showMenu ,item} = props
+    const { isMenuVisible, hideMenu, showMenu, item } = props
     let tags = item?.snippet?.tags
     let snippet = item?.snippet
     let statistics = item?.statistics
@@ -18,10 +18,10 @@ const DetailCard = (props) => {
     return (
         <>
             <View style={styles.titleView}>
-                {tags?.map((tag,indes)=>{
-                    return(
-                        <View style={{flexDirection:'row',}}>
-                          <Text style={styles.blueText}>{`#${tag} `}</Text>
+                {tags?.map((tag, indes) => {
+                    return (
+                        <View style={{ flexDirection: 'row', }}>
+                            <Text style={styles.blueText}>{`#${tag} `}</Text>
                         </View>
                     )
                 })
@@ -119,19 +119,19 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
-    viewsText:{
-        color:'grey',
-        fontSize:14,
+    viewsText: {
+        color: 'grey',
+        fontSize: 14,
     },
     boldText: {
         color: 'black',
         fontSize: 14,
-        marginLeft:5,
+        marginLeft: 5,
         fontWeight: "bold",
     },
-    report:{
-        marginLeft:10   
-     },
+    report: {
+        marginLeft: 10
+    },
 })
 
 

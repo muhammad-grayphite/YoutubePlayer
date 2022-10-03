@@ -1,5 +1,5 @@
 import React, { useEffect, } from "react";
-import { ScrollView, View, Text } from "react-native";
+import { ScrollView, View, Text, Dimensions } from "react-native";
 import SearchBar from "../../components/Search";
 import FilterCard from "../../components/FilterCard";
 import styles from "./styles";
@@ -33,40 +33,29 @@ function Filter({ navigation }) {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <ScrollView
+            stickyHeaderIndices={[1]}
+            style={{ flex: 1, }}>
             <SearchBar
                 onChangeText={handleSearchValue}
                 searchText={search}
                 handleSearchPress={handleSearchPress}
             />
-            <ScrollView
-                scrollEventThrottle={300}
-                onScroll={(event) => {
-                    let itemHeight = 280;
-                    let currentOffset = Math.floor(event.nativeEvent.contentOffset.y);
-                    let currentItemIndex = Math.ceil(currentOffset / itemHeight);
-                    if (distanceFromEnd) {
-                        if (currentItemIndex >= distanceFromEnd) {
-                            //   fetchData()
-                        }
-                    } else {
-                        distanceFromEnd = 4;
-                    }
-                }}
-                style={styles.container}
-            >
-                <View style={styles.outerView}>
-                    <View style={styles.sideMenu}></View>
-                    <View>
-                        <Text>zae</Text>
-                    </View>
-                    {/* <FilterCard /> */}
+
+            <View style={styles.outerView}>
+
+                <View style={styles.sideMenu}></View>
+
+                <View style={{ flex: 1, }}>
+                    <FilterCard />
+                    <FilterCard />
+                    <FilterCard />
+                    <FilterCard />
                 </View>
+            </View>
 
 
-
-            </ScrollView>
-        </View>
+        </ScrollView>
     )
 }
 

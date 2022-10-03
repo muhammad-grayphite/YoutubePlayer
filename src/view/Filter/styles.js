@@ -12,9 +12,10 @@ const styles = StyleSheet.create({
         // alignItems: "center",
         // alignSelf: 'center',
         flexDirection: 'row',
-        backgroundColor: 'red',
+        // backgroundColor: '#F9F9F9',
         flexWrap: "wrap",
         flex: 1,
+
     },
     sideMenu: {
         width: 250,
