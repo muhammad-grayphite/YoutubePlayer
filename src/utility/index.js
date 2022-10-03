@@ -6,7 +6,7 @@ export const fetchVideos =(obj) => {
   if(obj.nextPageToken){
      url = `${baseUrl}search?part=snippet&type=video&maxResults=50&q=programming&key=${SECRET}&pageToken=${obj.nextPageToken}`
   }else{
-    url = `${baseUrl}search?part=snippet&type=video&maxResults=50&q=programming&key=${SECRET}`
+    url = `${baseUrl}search?part=snippet&type=video&maxResults=50&q=songs&key=${SECRET}`
   }
     return new Promise((resolve, reject) => {
         fetch(url,{

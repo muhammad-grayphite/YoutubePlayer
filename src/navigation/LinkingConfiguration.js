@@ -4,19 +4,19 @@
  * https://reactnavigation.org/docs/configuring-links
  */
 
- import { LinkingOptions } from '@react-navigation/native';
- import * as Linking from 'expo-linking';
- 
- 
- const linking = {
-   prefixes: [Linking.createURL('/')],
-   config: {
-     screens: {
-       Home: 'Home',
-       Feed: 'Feed',
-     },
-   },
- };
- 
- export default linking;
- 
+import { LinkingOptions } from '@react-navigation/native';
+import * as Linking from 'expo-linking';
+
+
+const linking = {
+  prefixes: [Linking.createURL('/')],
+  config: {
+    screens: {
+      Home: 'Home',
+      Feed: 'Feed',
+      Filter: 'Filter',
+    },
+  },
+};
+
+export default linking;
