@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, TextInput,Pressable, Image, StyleSheet } from "react-native";
+import { View, Text, TextInput, Pressable, Image, StyleSheet } from "react-native";
 
 const CommentsBox = () => {
+
     return (
         <>
             <View style={[styles.row2, { marginTop: 20 }]}>
@@ -24,9 +25,9 @@ const CommentsBox = () => {
                 </View>
             </View>
         </>
-    )
-}
-export default CommentsBox
+    );
+};
+export default CommentsBox;
 
 const styles = StyleSheet.create({
     channelIcon: {
@@ -47,10 +48,10 @@ const styles = StyleSheet.create({
         padding: 8,
 
     },
-    inputStyle:{ 
-        flex: 1, marginLeft: 20, 
-        borderBottomColor: '#D3D3D3', 
-        borderBottomWidth: 1 , paddingVertical:10,
-         paddingLeft:10 
+    inputStyle: {
+        flex: 1, marginLeft: 20,
+        borderBottomColor: '#D3D3D3',
+        borderBottomWidth: 1, paddingVertical: 10,
+        paddingLeft: 10
     }
-})
+});

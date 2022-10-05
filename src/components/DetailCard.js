@@ -6,21 +6,23 @@ import Entypo from '@expo/vector-icons/Entypo';
 import Feather from '@expo/vector-icons/Feather';
 import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
 
-
 const DetailCard = (props) => {
-    const { isMenuVisible, hideMenu, showMenu, item } = props
+    const { isMenuVisible, hideMenu, showMenu, item, } = props
     let tags = item?.snippet?.tags
     let snippet = item?.snippet
     let statistics = item?.statistics
     let date = moment(snippet?.publishedAt).format("MM/DD/YYYY");
-    // console.log('item is', item)
 
     return (
         <>
-            <View style={styles.titleView}>
+            <View
+                key={Math.random()}
+                style={styles.titleView}>
                 {tags?.map((tag, indes) => {
                     return (
-                        <View style={{ flexDirection: 'row', }}>
+                        <View
+                            key={Math.random()}
+                            style={{ flexDirection: 'row', }}>
                             <Text style={styles.blueText}>{`#${tag} `}</Text>
                         </View>
                     )
@@ -91,9 +93,9 @@ const DetailCard = (props) => {
                 </View>
             </View>
         </>
-    )
-}
-export default DetailCard
+    );
+};
+export default DetailCard;
 
 const styles = StyleSheet.create({
     titleView: {

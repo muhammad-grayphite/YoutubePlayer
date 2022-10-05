@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TextInput, StyleSheet, Image, Pressable } from "react-native";
+import { View, Text, TextInput, StyleSheet, Image, Pressable, Platform } from "react-native";
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
@@ -7,10 +7,12 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { black, red } from "../constants/colors";
 
 const SearchBar = (props) => {
-  const { onChangeText, searchText, handleSearchPress } = props
+  const { onChangeText, searchText, handleSearchPress, handleDrawer } = props
   return (
     <View style={styles.wraper}>
-      <View style={styles.leftView}>
+      <Pressable
+        onPress={handleDrawer}
+        style={styles.leftView}>
         <Feather
           name="menu"
           style={styles.iconStyle}
@@ -20,13 +22,14 @@ const SearchBar = (props) => {
           style={[styles.iconStyle, { color: red, marginLeft: 20 }]}
         />
         <Text style={styles.youTubeText}>YouTube</Text>
-      </View>
+      </Pressable>
+
       <View style={styles.middleView}>
         <TextInput
           placeholder="Search"
           onChangeText={onChangeText}
           value={searchText}
-          style={styles.inputText}
+          style={Platform.OS === "web" ? [styles.inputText, { outlineColor: "orange", outlineWidth: 0 }] : [styles.inputText]}
         />
         <Pressable
           onPress={handleSearchPress}
@@ -59,7 +62,6 @@ const SearchBar = (props) => {
           />
         </View>
       </View>
-
     </View>
   );
 };

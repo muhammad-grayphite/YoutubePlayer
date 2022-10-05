@@ -4,54 +4,49 @@ import {
   Text,
   StyleSheet,
   Image,
-  Modal,
   Pressable,
-  Alert
 } from "react-native";
-import { Link ,useLinkProps} from "@react-navigation/native";
+import { Link, useLinkProps } from "@react-navigation/native";
 import moment from "moment";
 import { Hoverable, Resizable } from "react-native-web-hooks";
 import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
+
 import { dots } from "../assets";
 import MenuList from "./menu";
 
 const Card = (props) => {
-  const {item, select_index, handleMenu, index, hideMenu , handlePress ,to, action , children } = props;
-  let prop = props?.item?.snippet;
 
+  const {
+    item,
+    select_index,
+    handleMenu,
+    index, hideMenu,
+    handlePress,
+  } = props;
+
+  let prop = props?.item?.snippet;
   let date = moment(prop?.publishedAt).format("MM/DD/YYYY");
   let thumbnail = prop?.thumbnails?.high?.url;
-
   const [isHover, setHover] = useState(false);
   const [isMenuVisible, setMenuVisible] = useState(false);
 
   return (
-    <Pressable 
-    //  onClick={onPress}
-    key={Math.random()}
-     onPress={handlePress}
-     style={isHover ? [styles.hover_wraper] : [styles.wraper]}>
+    <Pressable
+      key={Math.random()}
+      onPress={handlePress}
+      style={isHover ? [styles.hover_wraper] : [styles.wraper]}>
       <Hoverable
-        onHoverIn={() => {
-          setHover(true);
-        }}
-        onHoverOut={() => setHover(false)}
+        onHoverIn={() => { setHover(true) }}
+        onHoverOut={() => { setHover(false) }}
       >
         <View>
           <Image
-            source={{ uri:thumbnail }}
-            // source={{ uri: "https://reactnative.dev/img/tiny_logo.png" }}
-            style={{
-              width: 300,
-              height: 150
-            }}
+            source={{ uri: thumbnail }}
+            style={styles.imgStyle}
           />
-
           <View style={{ flex: 1, marginTop: 10, marginBottom: 10 }}>
             <View style={[styles.row]}>
-              <View
-                style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
-              >
+              <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
                 <Image
                   source={{ uri: "https://reactnative.dev/img/tiny_logo.png" }}
                   style={{ width: 20, height: 20, alignSelf: "flex-start" }}
@@ -61,7 +56,6 @@ const Card = (props) => {
                   ellipsizeMode="tail"
                   style={styles.nameStyle}
                 >
-                  {/* {item?.subtitle} */}
                   {prop?.title}
                 </Text>
               </View>
@@ -132,9 +126,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: { height: 2, width: 2 },
     elevation: 2
-    // marginHorizontal: 10
   },
-
   row: {
     flexDirection: "row",
     alignItems: "center",
@@ -171,7 +163,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 30 / 2
   },
-
   iconStyle: {
     width: 20,
     height: 20,
@@ -180,5 +171,9 @@ const styles = StyleSheet.create({
   TextStyle: {
     fontSize: 12,
     fontWeight: "500"
-  }
+  },
+  imgStyle: {
+    width: 300,
+    height: 150
+  },
 });

@@ -2,20 +2,28 @@ import React from "react";
 import { View, Text, Image, StyleSheet, TextInput, Pressable } from "react-native";
 
 const Comments = (props) => {
-    const {showReplyBox ,hideReplyBox,isVisible} = props
-    return (
-        <View style={{ marginTop: 20 }}>
+
+    const {
+        showReplyBox,
+        hideReplyBox,
+        selected_Index,
+        item, index,
+    } = props;
+
+    const comment = item?.snippet?.topLevelComment?.snippet;
+
+    return (comment?.textDisplay &&
+        <View
+            key={Math.random()}
+            style={{ marginTop: 20 }}>
             <View style={styles.row2}>
                 <Image
-                    source={{ uri: "https://reactnative.dev/img/tiny_logo.png" }}
+                    source={{ uri: comment?.authorProfileImageUrl }}
                     style={styles.channelIcon}
                 />
                 <View style={[styles.Left20, { flex: 1 }]}>
-                    <Text style={{ fontSize: 14, fontWeight: '700' }}>Shahid</Text>
-                    <Text style={{ marginTop: 5 }}>
-                        Dabbu khota, 🤒😈 khud ja kar kharra ho jaye na Niazi shetan🤒😈 k wakeel ki jagah,,, aur is ko ye bhi ijazat honi chahiye k ye apna Ganda munh uthaa kar adalat lanay k bajaye kisi gutter men chhorr kar aaye 😜😅😂
-                        Dabbu khota, 🤒😈 khud ja kar kharra ho jaye na Niazi shetan🤒😈 k wakeel ki jagah,,, aur is ko ye bhi ijazat honi chahiye k ye apna Ganda munh uthaa kar adalat lanay k bajaye kisi gutter men chhorr kar aaye 😜😅😂
-                    </Text>
+                    <Text style={{ fontSize: 14, fontWeight: '700' }}>{comment?.authorDisplayName}</Text>
+                    <Text style={{ marginTop: 5 }}>{comment?.textDisplay}</Text>
                 </View>
             </View>
 
@@ -23,42 +31,40 @@ const Comments = (props) => {
                 <View style={[styles.row2]}>
                     <Text>Like</Text>
                     <Text style={styles.Left20}>DisLike</Text>
-                      <Pressable onPress={showReplyBox}>
+                    <Pressable onPress={showReplyBox}>
                         <Text style={styles.Left20}>Reply</Text>
                     </Pressable>
                 </View>
-      {isVisible ?
-      <>
-                <View style={[styles.row2, { marginTop: 20 }]}>
-                    <Image
-                        source={{ uri: "https://reactnative.dev/img/tiny_logo.png" }}
-                        style={styles.channelIcon2}
-                    />
-                    <TextInput
-                        placeholder='Add comment'
-                        style={{ flex: 1, marginLeft: 20, borderBottomColor: '#D3D3D3', borderBottomWidth: 1 }}
-                    />
-                </View>
+                {selected_Index === index ?
+                    <>
+                        <View style={[styles.row2, { marginTop: 20 }]}>
+                            <Image
+                                source={{ uri: "https://reactnative.dev/img/tiny_logo.png" }}
+                                style={styles.channelIcon2}
+                            />
+                            <TextInput
+                                placeholder='Add comment'
+                                style={{ flex: 1, marginLeft: 20, borderBottomColor: '#D3D3D3', borderBottomWidth: 1 }}
+                            />
+                        </View>
 
-                <View style={[styles.row_space_between,{marginTop:10}]}>
-                    <Text style={{ marginLeft: 40 }}>emoji</Text>
-                    <View style={styles.row2}>
-                        <Pressable  onPress={hideReplyBox}>
-                        <Text style={{ marginRight: 20, }}>Cancel</Text>
-                        </Pressable>
-                        <Pressable style={styles.subscribed}>
-                            <Text>REPLY</Text>
-                        </Pressable>
-                    </View>
-                </View>
-                </>: null}
+                        <View style={[styles.row_space_between, { marginTop: 10 }]}>
+                            <Text style={{ marginLeft: 40 }}>emoji</Text>
+                            <View style={styles.row2}>
+                                <Pressable onPress={hideReplyBox}>
+                                    <Text style={{ marginRight: 20, }}>Cancel</Text>
+                                </Pressable>
+                                <Pressable style={styles.subscribed}>
+                                    <Text>REPLY</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </> : null}
             </View>
-
         </View>
-    )
-}
-
-export default Comments
+    );
+};
+export default Comments;
 
 const styles = StyleSheet.create({
     row: {
@@ -90,6 +96,6 @@ const styles = StyleSheet.create({
     subscribed: {
         backgroundColor: '#D3D3D3',
         padding: 8,
-    
-      }
-})
+
+    }
+});

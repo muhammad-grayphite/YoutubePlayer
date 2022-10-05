@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
 import { Hoverable, Resizable } from "react-native-web-hooks";
-import { dots,queue , share , clock, pie } from "../assets";
 
+import { dots, queue, share, clock, pie } from "../assets";
 
 const MenuList = (props) => {
+
   const [isHover, setHover] = useState(false);
   const [iswatchlater, setWatchlater] = useState(false);
   const [isSaveToPlaylist, setSaveToPlayList] = useState(false);
@@ -13,35 +14,17 @@ const MenuList = (props) => {
   const [isNotInterested, setNotInterested] = useState(false);
   const [isNotRecomend, setNotRecomend] = useState(false);
   const [isReport, setReport] = useState(false);
-
   const { select_index, handleMenu, index, hideMenu } = props;
+
   return (
-    <View
-      style={{
-        height: "100%",
-        alignItems: "center",
-        justifyContent: "center",
-        position: "absolute",
-        top: 0,
-        right: 0
-        // left: 150
-      }}
-    >
+    <View style={styles.wraper}>
       <Menu
         visible={select_index === index ? true : false}
-        style={{
-          backgroundColor: "#FFFFFF",
-          boxShadow: "2px 2px 2px rgba(0, 0, 0, 0.3)",
-          width: 248,
-          justifyContent: "center",
-          alignItems: "center"
-        }}
+        style={styles.menuStyle}
         onRequestClose={hideMenu}
       >
         <Hoverable
-          onHoverIn={() => {
-            setHover(true);
-          }}
+          onHoverIn={() => { setHover(true) }}
           onHoverOut={() => setHover(false)}
         >
           <MenuItem
@@ -59,9 +42,7 @@ const MenuList = (props) => {
         </Hoverable>
 
         <Hoverable
-          onHoverIn={() => {
-            setWatchlater(true);
-          }}
+          onHoverIn={() => { setWatchlater(true) }}
           onHoverOut={() => setWatchlater(false)}
         >
           <MenuItem
@@ -78,9 +59,7 @@ const MenuList = (props) => {
         </Hoverable>
 
         <Hoverable
-          onHoverIn={() => {
-            setSaveToPlayList(true);
-          }}
+          onHoverIn={() => { setSaveToPlayList(true) }}
           onHoverOut={() => setSaveToPlayList(false)}
         >
           <MenuItem
@@ -97,9 +76,7 @@ const MenuList = (props) => {
         </Hoverable>
 
         <Hoverable
-          onHoverIn={() => {
-            setShare(true);
-          }}
+          onHoverIn={() => { setShare(true) }}
           onHoverOut={() => setShare(false)}
         >
           <MenuItem
@@ -118,9 +95,7 @@ const MenuList = (props) => {
         <MenuDivider />
 
         <Hoverable
-          onHoverIn={() => {
-            setNotInterested(true);
-          }}
+          onHoverIn={() => { setNotInterested(true) }}
           onHoverOut={() => setNotInterested(false)}
         >
           <MenuItem
@@ -136,11 +111,8 @@ const MenuList = (props) => {
           </MenuItem>
         </Hoverable>
 
-        {/* <MenuDivider /> */}
         <Hoverable
-          onHoverIn={() => {
-            setNotRecomend(true);
-          }}
+          onHoverIn={() => { setNotRecomend(true) }}
           onHoverOut={() => setNotRecomend(false)}
         >
           <MenuItem
@@ -157,9 +129,7 @@ const MenuList = (props) => {
         </Hoverable>
 
         <Hoverable
-          onHoverIn={() => {
-            setReport(true);
-          }}
+          onHoverIn={() => { setReport(true) }}
           onHoverOut={() => setReport(false)}
         >
           <MenuItem
@@ -181,6 +151,14 @@ const MenuList = (props) => {
 export default MenuList;
 
 const styles = StyleSheet.create({
+  wraper: {
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    top: 0,
+    right: 0,
+  },
   row: {
     flexDirection: "row",
     alignItems: "center",
@@ -196,5 +174,12 @@ const styles = StyleSheet.create({
   },
   menuItem_style: {
     height: 35
+  },
+  menuStyle: {
+    backgroundColor: "#FFFFFF",
+    boxShadow: "2px 2px 2px rgba(0, 0, 0, 0.3)",
+    width: 248,
+    justifyContent: "center",
+    alignItems: "center"
   }
 });

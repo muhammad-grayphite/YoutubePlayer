@@ -1,290 +1,230 @@
 import * as React from "react";
-import {
-    View, Text,
-    Dimensions,
-} from "react-native";
+import { View, Text, Dimensions, } from "react-native";
 import { Video, AVPlaybackStatus } from 'expo-av';
-import VideoPlayer from 'expo-video-player'
+import VideoPlayer from 'expo-video-player';
 import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
 
 import VideoCard from "../../components/VideoCard";
 import Comments from '../../components/comments';
 import { videos } from "../../constants/values";
-import styles from "./styles";
 import { ScrollView } from "react-native-web";
 import DetailCard from "../../components/DetailCard";
 import ChannelCard from "../../components/ChannelCard";
 import CommentsBox from "../../components/CommentsBox";
-import {WebView} from "react-native-webview";
-import { fetchVideoById, fetchVideos } from "../../utility";
+import { isCloseToBottom } from "../../assets/RandomFun";
+import { fetchVideoById, fetchVideos, getVideoComments } from "../../utility";
+import SearchBar from "../../components/Search";
+import styles from "./styles";
 
-// import YoutubePlayer from 'react-native-youtube-iframe';
 
 function Feed({ navigation, route }) {
-    const video = React.useRef(null);
-    const refVideo2 = React.useRef(null)
-    const scrollRef = React.useRef();
-    let videoId = route?.params?.id?.videoId
 
-    const [inFullscreen, setInFullsreen] = React.useState(false)
+    const video = React.useRef(null);
+    const refVideo2 = React.useRef(null);
+    const scrollRef = React.useRef();
+    let videoId = route?.params?.id?.videoId;
+    const [inFullscreen, setInFullsreen] = React.useState(false);
 
     React.useEffect(() => {
-        fetchVideosList()
+        fetchVideosList();
+        fetchVideoComments();
     }, []);
 
-    React.useEffect(()=>{
-        fetchVideoDetail()
-    },[])
+    React.useEffect(() => {
+        fetchVideoDetail();
+    }, [])
 
     const [state, updateState] = React.useReducer(
         (state, newState) => ({ ...state, ...newState }),
         {
             isReplyBoxVisible: false,
-            video_Id:videoId,
-            // video_Id: route?.params?.sources[0] ? route?.params?.sources[0] : '',
+            video_Id: videoId,
             isMenuVisible: false,
-            showmore: false , 
-            video_detail:{},
+            showmore: false,
+            video_detail: {},
+            video_comments: {},
             list: [],
+            commentsList: [],
             nextPageToken: null,
-
+            comments_next_page_token: null,
+            search: '', selectedIndex: null,
         }
-    )
-    const { isReplyBoxVisible, video_Id, isMenuVisible, showmore , video_detail , list , nextPageToken } = state
+    );
+    const {
+        isReplyBoxVisible, video_Id,
+        isMenuVisible, showmore,
+        video_detail, list,
+        nextPageToken, commentsList,
+        search, video_comments,
+        comments_next_page_token,
+        selectedIndex,
+    } = state;
 
-
-
-    const fetchVideoDetail =async(id)=>{
-        console.log('video id', video_Id)
+    const fetchVideoDetail = async (id) => {
         let _id = ''
-        if(id){
-            _id=id
-        }else{
-            _id=video_Id
-        }
+        if (id) {
+            _id = id
+        } else {
+            _id = video_Id
+        };
 
-       await fetchVideoById(_id).then((res)=>{
-           try{
-            console.log('inside',res)
-             updateState({video_detail:res?.items[0]})
-           }catch(error){
-            console.log('error',error)
-           }
-       }).catch((error)=>{
-         console.log('error', error)
-       })
-    }
+        await fetchVideoById(_id).then((res) => {
+            try {
+                updateState({ video_detail: res?.items[0] });
+            } catch (error) { console.log('error', error) };
+        }).catch((error) => { console.log('error', error) });
+    };
 
     const fetchVideosList = async () => {
         let obj = { nextPageToken: nextPageToken }
         await fetchVideos(obj).then((res) => {
-          try {
-            if (res?.items) {
-              let allVideos = list.concat(res.items);
-              updateState({
-                list: allVideos,
-                nextPageToken: res?.nextPageToken
-              });
-    
-            }
-          } catch (error) {alert(error?.error?.message);}
-        }).catch((error) => { alert('somthing went wrong');})
-      }
-
-
-
-    const hideReplyBox = () => {
-        updateState({ isReplyBoxVisible: false })
-
-    }
-    const showReplyBox = () => {
-        updateState({ isReplyBoxVisible: true })
-    }
-
-    const handleVideoPress = (video) => {
-        // console.log('vide is' , video)
-        scrollRef.current?.scrollTo({
-            y: 0,
-            animated: true,
-        });
-        updateState({ video_Id: video?.id?.videoId })
-        fetchVideoDetail(video?.id?.videoId)
-        
-    }
-
-    const hideMenu = () => {
-        updateState({ isMenuVisible: false })
+            try {
+                if (res?.items) {
+                    let allVideos = list.concat(res.items);
+                    updateState({
+                        list: allVideos,
+                        nextPageToken: res?.nextPageToken
+                    });
+                };
+            } catch (error) { alert(error?.error?.message) };
+        }).catch((error) => { alert('somthing went wrong') });
     };
 
+    const fetchVideoComments = async (id) => {
+        let _id = '';
+        if (id) {
+            _id = id
+        } else {
+            _id = video_Id
+        };
+        let obj = { nextPageToken: comments_next_page_token, vid: _id };
+        await getVideoComments(obj).then((res) => {
+            try {
+                if (res?.items) {
+                    let allComments = commentsList.concat(res.items);
+                    updateState({
+                        commentsList: allComments,
+                        comments_next_page_token: res?.nextPageToken
+                    });
+                };
+            } catch (error) { console.log('error', error) };
+        }).catch((error) => { console.log('error', error) });
+    };
+
+    const handleVideoPress = (video) => {
+        scrollRef.current?.scrollTo({ y: 0, animated: true, });
+        updateState({ video_Id: video?.id?.videoId });
+        fetchVideoDetail(video?.id?.videoId);
+        fetchVideoComments(video?.id?.videoId);
+    };
+
+    const hideReplyBox = () => { updateState({ selectedIndex: null }) };
+    const showReplyBox = (index) => { updateState({ selectedIndex: index }) };
+    const hideMenu = () => { updateState({ isMenuVisible: false }) };
     const showMenu = () => updateState({ isMenuVisible: true });
-    const showMore = () => updateState({ showmore: !showmore })
- 
+    const showMore = () => updateState({ showmore: !showmore });
+    const handleDrawer = () => { navigation.openDrawer(); };
+    const handleSearchValue = (value) => { updateState({ search: value }) };
+
+    const Detailcard = React.useMemo(() => (
+        <DetailCard
+            key={Math.random()}
+            isMenuVisible={isMenuVisible}
+            hideMenu={hideMenu}
+            showMenu={showMenu}
+            item={video_detail}
+        />
+    ), [video_detail, isMenuVisible]);
+
+    const Channelcard = React.useMemo(() => (
+        <ChannelCard
+            key={Math.random()}
+            handleshowMore={showMore}
+            showmore={showmore}
+            item={video_detail}
+        />
+    ), [video_detail, showmore]);
+
+    const comments = React.useMemo(() => (
+        commentsList?.map((comment, index) => {
+            return (
+                <Comments
+                    key={Math.random()}
+                    item={comment}
+                    index={index}
+                    showReplyBox={() => showReplyBox(index)}
+                    hideReplyBox={() => hideReplyBox()}
+                    selected_Index={selectedIndex}
+                />
+            )
+        })
+    ), [commentsList, selectedIndex]);
+
+    const videocard = React.useMemo(() => (
+        list?.map((item, index) => {
+            return (
+                <VideoCard
+                    handlePress={() => handleVideoPress(item)}
+                    key={`key${index}`}
+                    item={item}
+                    index={index}
+                />
+            );
+        })
+    ), [list]);
+
     return (
-        <ScrollView ref={scrollRef}>
-            <View style={styles.container}>
-                <View style={styles.row}>
-                    <View style={styles.playerView}>
+        <View style={{ flex: 1 }}>
+            <SearchBar
+                onChangeText={handleSearchValue}
+                searchText={search}
+                handleSearchPress={() => { }}
+                handleDrawer={handleDrawer}
+            />
+            <ScrollView
+                onScroll={({ nativeEvent }) => {
+                    if (isCloseToBottom(nativeEvent)) {
+                        fetchVideoComments();
+                        fetchVideosList();
+                    }
+                }}
+                scrollEventThrottle={400}
+                ref={scrollRef}
+            >
+                <View style={styles.container}>
+                    <View style={styles.row}>
+                        <View style={styles.playerView}>
+                            <iframe
+                                width="100%" height="615"
+                                src={`https://www.youtube.com/embed/${video_Id}?modestbranding=1&rel=1&autoplay=1`}
+                                allowFullScreen='allowfullscreen'
+                            >
+                            </iframe>
 
-                   <iframe
-                    width="100%" height="615" 
-                    src={`https://www.youtube.com/embed/${video_Id}?modestbranding=1&rel=1&autoplay=1`}
-                    // src="https://www.youtube.com/embed/W9hXsU_vh5k?modestbranding=1&rel=1"
-                    // title="YouTube video player" frameborder="0" 
-                    // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowFullScreen='allowfullscreen'
-                    >
-                    </iframe>
-
-                   
-
-                        {/* <VideoPlayer
-                            style={{ height: inFullscreen ? Dimensions.get('window').height : 500, width: inFullscreen ? Dimensions.get('window').width : '100%', }}
-                            videoProps={
-                                {
-                                    shouldPlay: true,
-                                    autoHidePlayer:true,
-                                    // resizeMode: 'contain',
-                                    ref: refVideo2,
-                                    style: {
-                                        videoBackgroundColor: 'black',
-                                        height: inFullscreen ? Dimensions.get('window').height : 500,
-                                        width: inFullscreen ? Dimensions.get('window').width : '100%',
-                                    },
-                                    source: { uri: video_Id ? video_Id : 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
-
-                                }}
-                            defaultControlsVisible={true}
-                            autoHidePlayer={false}
-                            fullscreen={{
-                                inFullscreen: inFullscreen,
-                                enterFullscreen: async () => {
-                                    setInFullsreen(!inFullscreen)
-                                    refVideo2.current.setStatusAsync({
-                                        shouldPlay: true,
-                                    })
-
-                                },
-                                exitFullscreen: async () => {
-                                    setInFullsreen(false)
-                                },
-
-                            }}
-                        /> */}
-
-
-                        {!inFullscreen ?
-                            <>
-                                <DetailCard
-                                    isMenuVisible={isMenuVisible}
-                                    hideMenu={hideMenu}
-                                    showMenu={showMenu}
-                                    item={video_detail}
-                                />
-                                <View style={styles.divider}></View>
-
-
-                                <View style={styles.channelNameView}>
-                                    <ChannelCard
-                                        handleshowMore={showMore}
-                                        showmore={showmore}
-                                        item={video_detail}
-
-                                    />
-                                </View>
-                                <View style={styles.divider}></View>
-
-                                <View style={[styles.row2, styles.channelNameView]}>
-                                    <Text style={styles.boldText}>11 Comments</Text>
-                                    <Text style={{ marginLeft: 30 }}>Sort</Text>
-                                </View>
-
-                                <CommentsBox />
-                                <Comments
-                                    showReplyBox={showReplyBox}
-                                    hideReplyBox={hideReplyBox}
-                                    isVisible={isReplyBoxVisible}
-                                />
-                                <Comments />
-                            </> : null
-                        }
-
-                    </View>
-
-                    {!inFullscreen ?
-                        <>
-                            <View style={styles.list}>
-                                {list?.map((item, index) => {
-                                    return (
-                                        <VideoCard
-                                            handlePress={() => handleVideoPress(item)}
-                                            key={`key${index}`}
-                                            item={item}
-                                            index={index}
-                                        />
-                                    );
-                                })}
-                            </View>
-                        </> : null}
-
-                </View>
-
-                {inFullscreen ?
-                    <View>
-                        <View style={styles.row}>
-                            <View style={styles.playerView}>
+                            {!inFullscreen ?
                                 <>
-                                    <DetailCard
-                                        isMenuVisible={isMenuVisible}
-                                        hideMenu={hideMenu}
-                                        showMenu={showMenu}
-                                    />
+                                    {Detailcard}
                                     <View style={styles.divider}></View>
-
-                                    <View style={styles.channelNameView}>
-                                        <ChannelCard
-                                            handleshowMore={showMore}
-                                            showmore={showmore}
-                                        />
-                                    </View>
-
+                                    <View style={styles.channelNameView}>{Channelcard}</View>
                                     <View style={styles.divider}></View>
-
                                     <View style={[styles.row2, styles.channelNameView]}>
                                         <Text style={styles.boldText}>11 Comments</Text>
                                         <Text style={{ marginLeft: 30 }}>Sort</Text>
                                     </View>
-
                                     <CommentsBox />
-
-                                    <Comments
-                                        showReplyBox={showReplyBox}
-                                        hideReplyBox={hideReplyBox}
-                                        isVisible={isReplyBoxVisible}
-                                    />
-                                    <Comments />
-                                </>
-                            </View>
-                            <View style={styles.list}>
-                                {list?.map((item, index) => {
-                                    return (
-                                        <VideoCard
-                                            handlePress={() => handleVideoPress(item)}
-                                            key={`key${index}`}
-                                            item={item}
-                                            index={index}
-                                        />
-                                    );
-                                })}
-                            </View>
-
+                                    {comments}
+                                </> : null
+                            }
                         </View>
-                    </View> :
-                    null}
 
-
-            </View>
-        </ScrollView>
-    )
-}
-
-export default Feed
+                        {!inFullscreen ?
+                            <>
+                                <View style={styles.list}>{videocard}</View>
+                            </> : null}
+                    </View>
+                </View>
+            </ScrollView>
+        </View>
+    );
+};
+export default Feed;

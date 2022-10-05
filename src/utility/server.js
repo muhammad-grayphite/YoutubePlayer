@@ -1,1 +1,1 @@
-export const baseUrl = 'https://www.googleapis.com/youtube/v3/'
+export const baseUrl = 'https://www.googleapis.com/youtube/v3/';
